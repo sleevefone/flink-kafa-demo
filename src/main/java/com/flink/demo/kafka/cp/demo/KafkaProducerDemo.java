@@ -38,7 +38,7 @@ import java.util.Properties;
  * ==================
  *
  * 问题一：生产者消费者为何都是直连kafka
- * 
+ *
 
  */
 public class KafkaProducerDemo {
