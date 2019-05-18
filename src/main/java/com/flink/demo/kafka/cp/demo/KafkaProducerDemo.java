@@ -36,6 +36,9 @@ import java.util.Properties;
  * ==================
  * 需要手动创建topic
  * ==================
+ *
+ * 问题一：生产者消费者为何都是直连kafka
+ * 
 
  */
 public class KafkaProducerDemo {
