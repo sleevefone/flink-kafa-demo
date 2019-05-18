@@ -31,6 +31,10 @@ public class WriteIntoKafka {
                 parameterTool.getRequired("topic"),
                 new SimpleStringSchema()));
 
+        hello(env, messageStream);
+    }
+
+    static void hello(StreamExecutionEnvironment env, DataStream<String> messageStream) throws Exception {
         messageStream.rebalance().map(new MapFunction<String, String>() {
             //序列化设置
             private static final long serialVersionUID = 1L;

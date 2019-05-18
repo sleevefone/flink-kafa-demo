@@ -9,6 +9,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class ReadFromKafka {
 
@@ -30,28 +31,18 @@ public class ReadFromKafka {
 
         ParameterTool parameterTool = ParameterTool.fromMap(properties);
 
-        FlinkKafkaConsumer<String> consumer010 = new FlinkKafkaConsumer<>(
-                parameterTool.getRequired("topic"), new SimpleStringSchema(), parameterTool.getProperties());
+        String topic = parameterTool.getRequired("topic");
+        Properties properties1 = parameterTool.getProperties();
+
+        SimpleStringSchema simpleStringSchema = new SimpleStringSchema();
+        FlinkKafkaConsumer<String> consumer010 = new FlinkKafkaConsumer<>(topic, simpleStringSchema, properties1);
 
 
-        DataStream<String> messageStream = env
-                .addSource(consumer010);
+        DataStream<String> messageStream = env.addSource(consumer010);
 
         // print() will write the contents of the stream to the TaskManager's standard out stream
         // the rebelance call is causing a repartitioning of the data so that all machines
         // see the messages (for example in cases when "num kafka partitions" < "num flink operators"
-        messageStream.rebalance().map(new MapFunction<String, String>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String map(String value) throws Exception {
-                return value;
-            }
-        });
-
-
-        messageStream.print();
-
-        env.execute();
+        WriteIntoKafka.hello(env, messageStream);
     }
 }
