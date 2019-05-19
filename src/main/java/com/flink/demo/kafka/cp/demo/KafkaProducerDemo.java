@@ -37,8 +37,24 @@ import java.util.Properties;
  * 需要手动创建topic
  * ==================
  *
+ * ---------------------------------------
+ *
+ * 控制台测试kafka
+ *
+ * 1：启动控制台消费者
+ *      ./bin/kafka-console-consumer.sh --bootstrap-server localhost:2181 --topic test2
+ *      ./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test2
+ *
+ *      --大概为0.9以前的版本可以使用，高版本已经被移除了
+ *      ./bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test2
+ *
+ * 2：启动控制台生产者
+ *       ./bin/kafka-console-.sh --bootstrap-server localhost:2181 --topic test2
+ *       ./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test2
+ *
  * 问题一：生产者消费者为何都是直连kafka
  *
+ * 3: ./bin/kafka-replay-log-producer.sh,  新版版本没有了
 
  */
 public class KafkaProducerDemo {

@@ -51,7 +51,11 @@
             <artifactId>slf4j-nop</artifactId>
             <version>1.7.22</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-wikiedits_2.11</artifactId>
+            <version>1.8.0</version>
+        </dependency>
 
 
         <dependency>
