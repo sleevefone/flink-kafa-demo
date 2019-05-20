@@ -18,6 +18,8 @@ public class ReadFromKafka3 {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Map<String, String> properties = new HashMap<>();
+
+        properties.put("zookeeper.connect", "192.168.191.130:2181");
         properties.put("bootstrap.servers", "192.168.191.130:9092");
         properties.put("group.id", "group_test_stephan");
         properties.put("enable.auto.commit", "true");
