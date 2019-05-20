@@ -11,15 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class ReadFromKafka {
+public class ReadFromKafka3 {
 
     public static void main(String[] args) throws Exception {
 // create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Map<String, String> properties = new HashMap<>();
-//        properties.put("bootstrap.servers", "192.168.191.130:9092");
-        properties.put("bootstrap.servers", "172.30.68.135:9092");
+        properties.put("bootstrap.servers", "192.168.191.130:9092");
         properties.put("group.id", "group_test_stephan");
         properties.put("enable.auto.commit", "true");
         properties.put("auto.commit.interval.ms", "1000");

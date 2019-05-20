@@ -11,15 +11,13 @@ public class KafkaConsumerDemo {
     private final KafkaConsumer<String, String> consumer;
     private KafkaConsumerDemo(){
         Properties props = new Properties();
-//        props.put("bootstrap.servers", "172.16.143.147:9092");
-        props.put("bootstrap.servers", "192.168.191.130:9092");
-
-        props.put("group.id", "test_group");
+        props.put("bootstrap.servers", "172.16.143.147:9092");
+        props.put("group.id", "test");
         props.put("enable.auto.commit", "false");
         props.put("auto.commit.interval.ms", "1000");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        consumer = new KafkaConsumer<>(props);
+        consumer = new KafkaConsumer<String, String>(props);
     }
     void consume() throws InterruptedException {
         consumer.subscribe(Arrays.asList(KafkaProducerDemo.TOPIC));

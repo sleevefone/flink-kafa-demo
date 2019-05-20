@@ -18,13 +18,12 @@ public class ReadFromKafka {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Map<String, String> properties = new HashMap<>();
-//        properties.put("bootstrap.servers", "192.168.191.130:9092");
-        properties.put("bootstrap.servers", "172.30.68.135:9092");
-        properties.put("group.id", "group_test_stephan");
+        properties.put("bootstrap.servers", "172.16.143.147:9092");
+        properties.put("group.id", "test");
         properties.put("enable.auto.commit", "true");
         properties.put("auto.commit.interval.ms", "1000");
         properties.put("auto.offset.reset", "earliest");
-        properties.put("session.timeout.ms", "300000");
+        properties.put("session.timeout.ms", "30000");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("topic", "test2");
@@ -34,25 +33,16 @@ public class ReadFromKafka {
 
         String topic = parameterTool.getRequired("topic");
         Properties properties1 = parameterTool.getProperties();
+
         SimpleStringSchema simpleStringSchema = new SimpleStringSchema();
-        FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<>(topic, simpleStringSchema, properties1);
-        DataStream<String> messageStream = env.addSource(consumer);
-        hello(env, messageStream);
-    }
+        FlinkKafkaConsumer<String> consumer010 = new FlinkKafkaConsumer<>(topic, simpleStringSchema, properties1);
 
-    static void hello(StreamExecutionEnvironment env, DataStream<String> messageStream) throws Exception {
-        messageStream.rebalance().map(new MapFunction<String, String>() {
-            //序列化设置
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            public String map(String value) throws Exception {
-                return value;
-            }
-        });
+        DataStream<String> messageStream = env.addSource(consumer010);
 
-        messageStream.print().setParallelism(1);
-
-        env.execute();
+        // print() will write the contents of the stream to the TaskManager's standard out stream
+        // the rebelance call is causing a repartitioning of the data so that all machines
+        // see the messages (for example in cases when "num kafka partitions" < "num flink operators"
+        WriteIntoKafka.hello(env, messageStream);
     }
 }
