@@ -19,8 +19,8 @@ public class ReadFromKafka3 {
 
         Map<String, String> properties = new HashMap<>();
 
-        properties.put("zookeeper.connect", "192.168.191.130:2181");
-        properties.put("bootstrap.servers", "192.168.191.130:9092");
+        properties.put("zookeeper.connect", "182.119.91.183:2181");
+        properties.put("bootstrap.servers", "182.119.91.183:9092");
         properties.put("group.id", "group_test_stephan");
         properties.put("enable.auto.commit", "true");
         properties.put("auto.commit.interval.ms", "1000");
@@ -28,7 +28,7 @@ public class ReadFromKafka3 {
         properties.put("session.timeout.ms", "300000");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.put("topic", "test2");
+        properties.put("topic", "app_log");
         // parse user parameters
 
         ParameterTool parameterTool = ParameterTool.fromMap(properties);
