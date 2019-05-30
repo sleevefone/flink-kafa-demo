@@ -1,9 +1,9 @@
 package com.example.demo.kafka;
 
+import com.ext.redis.mapper.RedisCommand;
+import com.ext.redis.mapper.RedisCommandDescription;
+import com.ext.redis.mapper.RedisMapper;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommand;
-import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommandDescription;
-import org.apache.flink.streaming.connectors.redis.common.mapper.RedisMapper;
 
 public class RedisExampleMapper implements RedisMapper<Tuple2<String, String>> {
 
