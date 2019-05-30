@@ -28,7 +28,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 
 /**
  * Example illustrating a windowed stream join between two data streams.
@@ -72,9 +71,6 @@ public class WindowJoin {
 
 		// print the results with a single thread, rather than in parallel
 		joinedStream.print().setParallelism(2);
-
-
-		FlinkJedisPoolConfig xxx = new FlinkJedisPoolConfig.Builder().setHost("xxx").setPort(111).build();
 
 		// execute program
 		env.execute("Windowed Join Example");
