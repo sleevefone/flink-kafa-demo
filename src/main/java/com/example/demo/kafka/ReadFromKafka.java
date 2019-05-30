@@ -1,10 +1,13 @@
 package com.example.demo.kafka;
 
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.streaming.connectors.redis.RedisSink;
+import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,20 +44,19 @@ public class ReadFromKafka {
 
 
 
-//        FlinkJedisPoolConfig r172.16.143.14edis = new FlinkJedisPoolConfig.Builder().setHost("172.16.143.147").build();
-////        InetSocketAddress node1 = new InetSocketAddress("", 6379);
-////        HashSet<InetSocketAddress> set = new HashSet<>();
-////        set.add(node1);
-////        FlinkJedisClusterConfig build = new FlinkJedisClusterConfig.Builder().setNodes(set).build();
-//        RedisSink<Tuple2<String, String>> listRedisSink = new RedisSink<>(redis, new RedisExampleMapper());
-//        messageStream
-//                .flatMap(new MyFlatMapFunction())
-//
-//                .addSink(listRedisSink);
+        FlinkJedisPoolConfig redis = new FlinkJedisPoolConfig.Builder().setHost("172.16.143.147").build();
+//        InetSocketAddress node1 = new InetSocketAddress("", 6379);
+//        HashSet<InetSocketAddress> set = new HashSet<>();
+//        set.add(node1);
+//        FlinkJedisClusterConfig build = new FlinkJedisClusterConfig.Builder().setNodes(set).build();
+        RedisSink<Tuple2<String, String>> listRedisSink = new RedisSink<>(redis, new RedisExampleMapper());
+        messageStream
+                .flatMap(new MyFlatMapFunction())
+
+                .addSink(listRedisSink);
 //
 //
 
-        messageStream.print();
         env.execute();
     }
 }
