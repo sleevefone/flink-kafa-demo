@@ -25,6 +25,7 @@ import redis.clients.jedis.JedisSentinelPool;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Redis command container if we want to connect to a single Redis server or to Redis sentinels
@@ -47,6 +48,8 @@ public class RedisContainer implements RedisCommandsContainer, Closeable {
 	 * @param jedisPool JedisPool which actually manages Jedis instances
 	 */
 	public RedisContainer(JedisPool jedisPool) {
+
+		Map<String, String> stringStringMap = jedisPool.getResource().hgetAll("");
 		Preconditions.checkNotNull(jedisPool, "Jedis Pool can not be null");
 		this.jedisPool = jedisPool;
 		this.jedisSentinelPool = null;

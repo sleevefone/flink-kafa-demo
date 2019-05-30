@@ -1,13 +1,18 @@
 package com.example.demo.kafka;
 
+import com.example.demo.redis.RedisResource;
 import com.ext.redis.RedisSink;
 import com.ext.redis.config.FlinkJedisPoolConfig;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.co.CoFlatMapFunction;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.util.Collector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +59,32 @@ public class ReadFromKafka {
                 .flatMap(new MyFlatMapFunction())
 
                 .addSink(listRedisSink);
+
+        DataStreamSource<Object> redisSource = env.addSource(new RedisResource<>());
+
+        SingleOutputStreamOperator<Object> connectData = messageStream.connect(redisSource)
+                .flatMap(new CoFlatMapFunction<String, Object, Object>() {
+                    Map<String, String> conditions = new HashMap<>();
+
+                    //kafka source
+                    @Override
+                    public void flatMap1(String s, Collector<Object> collector) throws Exception {
+
+                        // TODO: 2019-05-30 business
+
+                        collector.collect("xxx--Result--xx");
+                    }
+
+                    //redis source
+                    @Override
+                    public void flatMap2(Object o, Collector<Object> collector) throws Exception {
+//                        Map<String, String> stringStringMap = jedisPool.getResource().hgetAll("");
+
+
+                    }
+                });
+
+        connectData.print();
 //
 //
 
