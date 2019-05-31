@@ -5,7 +5,9 @@ import com.ext.redis.mapper.RedisCommandDescription;
 import com.ext.redis.mapper.RedisMapper;
 import org.apache.flink.api.java.tuple.Tuple2;
 
-public class RedisExampleMapper implements RedisMapper<Tuple2<String, String>> {
+import java.util.Objects;
+
+public class RedisExampleMapper implements RedisMapper<Tuple2<String, Integer>> {
 
 
     @Override
@@ -14,12 +16,12 @@ public class RedisExampleMapper implements RedisMapper<Tuple2<String, String>> {
     }
 
     @Override
-    public String getKeyFromData(Tuple2<String, String> s) {
+    public String getKeyFromData(Tuple2<String, Integer> s) {
         return s.f0;
     }
 
     @Override
-    public String getValueFromData(Tuple2<String, String> s) {
-        return s.f1;
+    public String getValueFromData(Tuple2<String, Integer> s) {
+        return Objects.toString(s.f1);
     }
 }

@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * A sink that delivers data to a Redis channel using the Jedis client.
@@ -121,7 +122,9 @@ public class RedisSink<IN> extends RichSinkFunction<IN> {
 	 */
 	@Override
 	public void invoke(IN input) throws Exception {
-		String key = redisSinkMapper.getKeyFromData(input);
+        Map<String, String> mass_condition = this.redisCommandsContainer.hgetAll("mass_condition");
+        System.out.println("RedisSink.invoke,condition=" + mass_condition);
+        String key = redisSinkMapper.getKeyFromData(input);
 		String value = redisSinkMapper.getValueFromData(input);
 
 		switch (redisCommand) {

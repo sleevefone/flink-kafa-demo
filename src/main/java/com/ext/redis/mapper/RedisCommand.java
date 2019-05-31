@@ -64,7 +64,12 @@ public enum RedisCommand {
 	 * Sets field in the hash stored at key to value. If key does not exist,
 	 * a new key holding a hash is created. If field already exists in the hash, it is overwritten.
 	 */
-	HSET(RedisDataType.HASH);
+	HSET(RedisDataType.HASH),
+
+	/**
+	 * get hash value(fields)
+	 */
+	HGET(RedisDataType.HASH_GET_ALL);
 
 	/**
 	 * The {@link RedisDataType} this command belongs to.

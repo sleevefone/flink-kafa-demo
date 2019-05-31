@@ -18,6 +18,7 @@ package com.ext.redis.container;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * The container for all available Redis commands.
@@ -105,4 +106,12 @@ public interface RedisCommandsContainer extends Serializable {
 	 * @throws IOException if the instance can not be closed properly
 	 */
 	void close() throws IOException;
+//	Map<String, String> stringStringMap = jedisPool.getResource().hgetAll("");
+
+	/**
+	 * get all value for hash set
+	 * @param key
+	 * @return
+	 */
+	Map<String,String> hgetAll(String key);
 }

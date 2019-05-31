@@ -62,5 +62,10 @@ public enum RedisDataType {
 	 * Subscribers express interest in one or more channels, and only receive messages
 	 * that are of interest, without knowledge of what (if any) publishers there are.
 	 */
-	PUBSUB
+	PUBSUB,
+
+	/**
+	 * additional command for redis resource , 2019年05月31日10:03  fanhaibo_900
+	 */
+	HASH_GET_ALL
 }

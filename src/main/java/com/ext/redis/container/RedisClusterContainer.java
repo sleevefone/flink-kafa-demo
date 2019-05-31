@@ -23,6 +23,7 @@ import redis.clients.jedis.JedisCluster;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Redis command container if we want to connect to a Redis cluster.
@@ -158,4 +159,8 @@ public class RedisClusterContainer implements RedisCommandsContainer, Closeable 
 		this.jedisCluster.close();
 	}
 
+	@Override
+	public Map<String,String> hgetAll(String key) {
+		return 	this.jedisCluster.hgetAll(key);
+	}
 }

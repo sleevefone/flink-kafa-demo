@@ -1,11 +1,10 @@
-package com.example.demo.redis;
+package com.example.demo.kafka.redis.demo;
 
 import com.example.demo.kafka.MyFlatMapFunction;
 import com.example.demo.kafka.RedisExampleMapper;
 import com.ext.redis.RedisSink;
 import com.ext.redis.config.FlinkJedisPoolConfig;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -14,10 +13,9 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReadFromKafkaSinkRedis {
+public class ReadFromKafkaRtn {
 
     public static void main(String[] args) throws Exception {
-// create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Map<String, String> properties = new HashMap<>();
@@ -30,7 +28,7 @@ public class ReadFromKafkaSinkRedis {
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("topic", "test2");
-        // parse user parameters
+
         ParameterTool parameterTool = ParameterTool.fromMap(properties);
 
         FlinkKafkaConsumer<String> consumer010 = new FlinkKafkaConsumer<>(
@@ -38,28 +36,13 @@ public class ReadFromKafkaSinkRedis {
 
 
         DataStream<String> messageStream = env.addSource(consumer010);
+        FlinkJedisPoolConfig build = new FlinkJedisPoolConfig.Builder().setHost("192.168.191.130").build();
 
-        // print() will write the contents of the stream to the TaskManager's standard out stream
-        // the rebelance call is causing a repartitioning of the data so that all machines
-        // see the messages (for example in cases when "num kafka partitions" < "num flink operators"
-
-
-
-        FlinkJedisPoolConfig redis = new FlinkJedisPoolConfig.Builder().setHost("192.168.191.130").build();
-//        InetSocketAddress node1 = new InetSocketAddress("", 6379);
-//        HashSet<InetSocketAddress> set = new HashSet<>();
-//        set.add(node1);
-//        FlinkJedisClusterConfig build = new FlinkJedisClusterConfig.Builder().setNodes(set).build();
-        RedisSink<Tuple2<String, Integer>> listRedisSink = new RedisSink<>(redis, new RedisExampleMapper());
-        messageStream
-                .flatMap(new MyFlatMapFunction())
+        messageStream.flatMap(new MyFlatMapFunction())
                 .keyBy(0)
                 .sum(1)
-                .print();
-//                .addSink(listRedisSink)
-//        .setParallelism(1);
-
-
+                .addSink(new RedisSink<>(build, new RedisExampleMapper()))
+                .setParallelism(1);
         env.execute();
     }
 }
