@@ -42,7 +42,7 @@ public class ReadFromKafkaRtn {
                 .keyBy(0)
                 .sum(1)
                 .addSink(new RedisSink<>(build, new RedisExampleMapper()))
-                .setParallelism(1);
+                .setParallelism(4);
         env.execute();
     }
 }

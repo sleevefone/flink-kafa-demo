@@ -124,9 +124,12 @@ public class RedisSink<IN> extends RichSinkFunction<IN> {
 	public void invoke(IN input) throws Exception {
         Map<String, String> mass_condition = this.redisCommandsContainer.hgetAll("mass_condition");
         System.out.println("RedisSink.invoke,condition=" + mass_condition);
+        int cd2 = Integer.parseInt(mass_condition.get("cd2"));
         String key = redisSinkMapper.getKeyFromData(input);
 		String value = redisSinkMapper.getValueFromData(input);
 
+		if (Integer.parseInt(value)<cd2)
+		    return;
 		switch (redisCommand) {
 			case RPUSH:
 				this.redisCommandsContainer.rpush(key, value);
