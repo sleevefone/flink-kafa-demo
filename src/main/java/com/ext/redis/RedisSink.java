@@ -119,12 +119,16 @@ public class RedisSink<IN> extends RichSinkFunction<IN> {
 	 * Available commands are RPUSH, LPUSH, SADD, PUBLISH, SET, PFADD, HSET, ZADD.
 	 *
 	 * @param input The incoming data
+	 *
 	 */
 	@Override
 	public void invoke(IN input) throws Exception {
-        Map<String, String> mass_condition = this.redisCommandsContainer.hgetAll("mass_condition");
+
+		/** 单节点redis： bind 172.16.143.147,否则远程无法访问 */
+		Map<String, String> mass_condition = this.redisCommandsContainer.hgetAll("mass_condition");
         System.out.println("RedisSink.invoke,condition=" + mass_condition);
         int cd2 = Integer.parseInt(mass_condition.get("cd2"));
+
         String key = redisSinkMapper.getKeyFromData(input);
 		String value = redisSinkMapper.getValueFromData(input);
 

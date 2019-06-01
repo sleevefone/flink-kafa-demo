@@ -49,7 +49,6 @@ public class RedisContainer implements RedisCommandsContainer, Closeable {
      */
     public RedisContainer(JedisPool jedisPool) {
 
-        Map<String, String> stringStringMap = jedisPool.getResource().hgetAll("");
         Preconditions.checkNotNull(jedisPool, "Jedis Pool can not be null");
         this.jedisPool = jedisPool;
         this.jedisSentinelPool = null;
