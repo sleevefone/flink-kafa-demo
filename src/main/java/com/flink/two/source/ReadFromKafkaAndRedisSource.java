@@ -21,7 +21,7 @@ public class ReadFromKafkaAndRedisSource {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Map<String, String> properties = new HashMap<>();
-        properties.put("bootstrap.servers", "192.168.191.130:9092");
+        properties.put("bootstrap.servers", "172.16.143.147:9092");
         properties.put("group.id", "test");
         properties.put("enable.auto.commit", "true");
         properties.put("auto.commit.interval.ms", "1000");
@@ -34,14 +34,22 @@ public class ReadFromKafkaAndRedisSource {
 
         ParameterTool parameterTool = ParameterTool.fromMap(properties);
 
-        FlinkKafkaConsumer<String> consumer010 = new FlinkKafkaConsumer<>(
+        FlinkKafkaConsumer<String> consumer1 = new FlinkKafkaConsumer<>(
                 parameterTool.getRequired("topic"), new SimpleStringSchema(), parameterTool.getProperties());
 
 
-        DataStream<String> messageStream = env.addSource(consumer010);
+        DataStream<String> messageStream = env.addSource(consumer1);
+
+        HashMap<String, String> map2 = new HashMap<>(properties);
+
+        map2.put("topic", "test1");
+
+        FlinkKafkaConsumer<String> consumer2 = new FlinkKafkaConsumer<>(
+                parameterTool.getRequired("topic"), new SimpleStringSchema(), parameterTool.getProperties());
 
 
-        FlinkJedisPoolConfig build = new FlinkJedisPoolConfig.Builder().setHost("192.168.191.130").build();
+        DataStream<String> messageStream2 = env.addSource(consumer2);
+        FlinkJedisPoolConfig build = new FlinkJedisPoolConfig.Builder().setHost("172.16.143.147").build();
         RedisResource redisResource = new RedisResource(build);
         DataStreamSource<Map<String, String>> redisNewSource = env.addSource(redisResource);
         redisNewSource.connect(messageStream).flatMap(new CoFlatMapFunction<Map<String, String>, String, Object>() {
